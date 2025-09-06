@@ -1,0 +1,9 @@
+python-telegram-bot==20.7
+SQLAlchemy==2.0.22
+requests==2.31.0
+python-dotenv==1.0.0
+alembic==1.11.1
+yookassa==3.0.0
+pytest==7.4.0
+flake8==6.1.0
+black==24.3.0
