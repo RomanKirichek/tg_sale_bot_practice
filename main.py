@@ -10,6 +10,16 @@ SERVICES = {
     'vip': {'name': 'Член', 'price': 500000},  # 5000 руб
 }
 
+from database.db import init_database
+
+def main():
+    print("Инициализация базы данных...")
+    init_database()
+    print("Готово! Файл базы данных создан в папке data/")
+
+if __name__ == "__main__":
+    main()
+
 # Обработчик команды /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
