@@ -70,6 +70,39 @@ def get_product_by_id(product_id: int) -> Optional[Dict]:
     conn.close()
     return dict(row) if row else None
 
+
+# database/queries.py
+
+# ... (остальные импорты и функции)
+
+def delete_product(product_id: int) -> bool:
+    """
+    Удаляет товар из базы данных по его ID.
+
+    Args:
+        product_id (int): ID товара для удаления.
+
+    Returns:
+        bool: True, если товар был найден и удален, False, если товар не найден.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Выполняем запрос на удаление
+    cursor.execute("DELETE FROM products WHERE id = ?", (product_id,))
+
+    # Сохраняем изменения
+    conn.commit()
+
+    # Проверяем, была ли удалена хотя бы одна строка
+    rows_affected = cursor.rowcount
+
+    # Закрываем соединение
+    conn.close()
+
+    # Возвращаем True, если строка была удалена, иначе False
+    return rows_affected > 0
+
 #----------------------------------------
 def add_to_cart(user_id: int, product_id: int, quantity: int = 1):
     """Добавляет товар в корзину пользователя."""

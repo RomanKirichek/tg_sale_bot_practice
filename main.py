@@ -1,7 +1,8 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 from database.db import init_database
-from database.queries import create_user, get_user
+from database.queries import create_user, get_user, get_all_products, delete_product
+from database.seeds import seed_products
 
 # Токен от BotFather
 TOKEN = "7514093364:AAGGHIabFBhurOFDtQW-92_wOA6e4x8MZuc"
@@ -106,6 +107,10 @@ def main():
     print("Инициализация базы данных...")
     init_database()
     print("Готово! Файл базы данных создан в папке data/")
+
+
+
+    print(get_all_products())
 
     # Создаём приложение
     application = Application.builder().token(TOKEN).build()
