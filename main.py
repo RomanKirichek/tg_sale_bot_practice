@@ -50,26 +50,31 @@ async def show_services(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
+    # Получаем товары из базы данных
+    products = get_all_products()  # 👈 Вызываем функцию из database/queries.py
+
+    # Формируем кнопки на основе товаров из БД
     keyboard = []
-    for service_id, service in SERVICES.items():
-        price_rub = service['price'] / 100  # Переводим в рубли
+    for product in products:
+        # product — это объект Product (из dataclass) или словарь
+        # Проверь, как именно выглядит product в твоём случае
+        price_rub = product['price'] / 100  # Переводим из копеек в рубли
         keyboard.append([
             InlineKeyboardButton(
-                f"{service['name']} - {price_rub} руб",
-                callback_data=f"buy_{service_id}"
+                f"{product['name']} - {price_rub:.2f} руб",  # 👈 Используем ключи
+                callback_data=f"buy_{product['id']}"  # ID товара для покупки
             )
         ])
 
+    # Добавляем кнопку "Назад"
     keyboard.append([InlineKeyboardButton("🔙 Назад", callback_data="back")])
     reply_markup = InlineKeyboardMarkup(keyboard)
+
+    # Отправляем сообщение с динамическим текстом
     await query.edit_message_text(
-        "🎯 Выберите услугу:\n\n"
-        "• Хуй в жопе - 1000 руб\n"
-        "• Пенис в горле - 2500 руб\n"
-        "• Член в ухе - 5000 руб",
+        "🎯 Выберите товар:",
         reply_markup=reply_markup
     )
-
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -108,9 +113,6 @@ def main():
     init_database()
     print("Готово! Файл базы данных создан в папке data/")
 
-
-
-    print(get_all_products())
 
     # Создаём приложение
     application = Application.builder().token(TOKEN).build()

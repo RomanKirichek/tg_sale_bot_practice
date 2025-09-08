@@ -57,6 +57,7 @@ def get_all_products() -> List[Dict]:
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM products')
     rows = cursor.fetchall()
+
     conn.close()
     return [dict(row) for row in rows]
 
